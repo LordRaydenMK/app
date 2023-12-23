@@ -1,6 +1,9 @@
+import app.cash.paparazzi.gradle.PaparazziPlugin
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("app.cash.paparazzi")
 }
 
 android {
@@ -17,6 +20,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+    }
+
+    sourceSets {
+        named("test") {
+            java.srcDir("src/paparazzi/java")
         }
     }
 

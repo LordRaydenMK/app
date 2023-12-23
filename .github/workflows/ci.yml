@@ -25,6 +25,9 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
+      - name: Paparazzi tests
+        run: ./gradlew verifyPaparazziDebug
+
       - name: Unit Tests
         run: ./gradlew test
 
