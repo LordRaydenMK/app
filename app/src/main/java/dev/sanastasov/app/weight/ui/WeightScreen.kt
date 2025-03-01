@@ -8,31 +8,44 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import dev.sanastasov.app.weight.domain.Weight
 
+@ExperimentalMaterial3Api
 @Composable
 fun WeightScreen(state: WeightViewState) {
-    when (state) {
-        WeightViewState.Loading -> CircularProgressIndicator()
-        is WeightViewState.Content -> WeightContent(state)
+    Scaffold(
+        topBar = { TopAppBar(title = { Text("My App") }) },
+        floatingActionButton = {
+            FloatingActionButton(onClick = { /* Handle FAB click */ }) {
+                Icon(Icons.Filled.Add, "Add")
+            }
+        }
+    ) { paddingValues ->
+        when (state) {
+            is WeightViewState.Content -> WeightContent(state, Modifier.padding(paddingValues))
+        }
     }
 }
 
 @Composable
-fun WeightContent(state: WeightViewState.Content) {
+fun WeightContent(state: WeightViewState.Content, modifier: Modifier) {
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(8.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
@@ -46,13 +59,12 @@ fun WeightContent(state: WeightViewState.Content) {
 @Composable
 fun WeightItem(item: WeightViewStateItem) {
     when (item) {
-        WeightViewStateItem.AddWeight -> AddWeightItem()
-        is WeightViewStateItem.WeekAverage -> WeekAverageItem(item)
+        is WeightViewStateItem.WeightEntry -> WeightEntry(item)
     }
 }
 
 @Composable
-fun AddWeightItem() {
+fun WeightEntry(item: WeightViewStateItem.WeightEntry) {
     Card {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -60,42 +72,22 @@ fun AddWeightItem() {
                 .padding(8.dp)
                 .fillMaxSize()
         ) {
-            Text(text = "No weight added for today!")
-
-            Spacer(modifier = Modifier.size(4.dp))
-
-            Button(onClick = {}) {
-                Text(text = "Add Weight")
-            }
+            Text(text = item.date, fontSize = 16.sp)
+            Spacer(modifier = Modifier.size(8.dp))
+            Text(text = item.weight, fontSize = 48.sp)
         }
     }
 }
 
-@Composable
-fun WeekAverageItem(item: WeightViewStateItem.WeekAverage) {
-    Card {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxSize()
-        ) {
-            Text(text = item.weight.value.toString(), fontSize = 48.sp)
-
-            Spacer(modifier = Modifier.size(4.dp))
-
-            Text(text = "0.5kg increase from last week")
-        }
-    }
-}
-
+@ExperimentalMaterial3Api
 @Composable
 @Preview
 private fun WeightScreenPreview() {
     val state = WeightViewState.Content(
         listOf(
-            WeightViewStateItem.AddWeight,
-            WeightViewStateItem.WeekAverage(10, Weight(75))
+            WeightViewStateItem.WeightEntry("74 kg", "1 Mar"),
+            WeightViewStateItem.WeightEntry("75.5 kg", "20 Feb"),
+            WeightViewStateItem.WeightEntry("76 kg", "10 Feb")
         )
     )
     Surface(Modifier.fillMaxSize()) {
