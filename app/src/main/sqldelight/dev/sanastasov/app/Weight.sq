@@ -1,0 +1,13 @@
+CREATE TABLE weights (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date TEXT UNIQUE NOT NULL,  -- Stored as ISO 8601 string (e.g., "2025-02-28")
+    weight REAL NOT NULL
+);
+
+INSERT INTO weights (date, weight) VALUES (date('now'), 73.0);
+INSERT INTO weights (date, weight) VALUES (date('now', '-7 days'), 73.8);
+INSERT INTO weights (date, weight) VALUES (date('now', '-14 days'), 74.5);
+INSERT INTO weights (date, weight) VALUES (date('now', '-21 days'), 75.2);
+
+getAllWeightsDesc:
+SELECT * FROM weights ORDER BY date DESC;
