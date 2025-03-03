@@ -1,7 +1,7 @@
 package dev.sanastasov.app.weight.ui
 
 sealed class WeightViewState {
-    data class Content(val items: List<WeightViewStateItem>) : WeightViewState()
+    data class History(val items: List<WeightViewStateItem>) : WeightViewState()
 }
 
 sealed class WeightViewStateItem {

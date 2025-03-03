@@ -37,13 +37,13 @@ fun WeightScreen(state: WeightViewState) {
         }
     ) { paddingValues ->
         when (state) {
-            is WeightViewState.Content -> WeightContent(state, Modifier.padding(paddingValues))
+            is WeightViewState.History -> WeightContent(state, Modifier.padding(paddingValues))
         }
     }
 }
 
 @Composable
-fun WeightContent(state: WeightViewState.Content, modifier: Modifier) {
+fun WeightContent(state: WeightViewState.History, modifier: Modifier) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -83,7 +83,7 @@ fun WeightEntry(item: WeightViewStateItem.WeightEntry) {
 @Composable
 @Preview
 private fun WeightScreenPreview() {
-    val state = WeightViewState.Content(
+    val state = WeightViewState.History(
         listOf(
             WeightViewStateItem.WeightEntry("74 kg", "1 Mar"),
             WeightViewStateItem.WeightEntry("75.5 kg", "20 Feb"),

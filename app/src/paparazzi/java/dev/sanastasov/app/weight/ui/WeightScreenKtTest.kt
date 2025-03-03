@@ -15,7 +15,7 @@ class WeightScreenKtTest {
 
     @Test
     fun content() {
-        val state = WeightViewState.Content(
+        val state = WeightViewState.History(
             listOf(
                 WeightViewStateItem.WeightEntry("73 kg", "1 Mar"),
                 WeightViewStateItem.WeightEntry("74.5 kg", "20 Feb"),

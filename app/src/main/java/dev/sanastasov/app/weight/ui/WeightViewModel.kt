@@ -2,6 +2,7 @@ package dev.sanastasov.app.weight.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dev.sanastasov.app.weight.domain.Weight
 import dev.sanastasov.app.weight.domain.WeightEntry
 import dev.sanastasov.app.weight.domain.WeightRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,7 +24,7 @@ class WeightViewModel(
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5_000),
-            WeightViewState.Content(emptyList())
+            WeightViewState.History(emptyList())
         )
 
     fun insertWeight(weightStr: String) {
@@ -38,10 +39,10 @@ class WeightViewModel(
     }
 }
 
-private fun List<WeightEntry>.toViewState(dateFormatter: DateTimeFormatter): WeightViewState.Content =
+private fun List<WeightEntry>.toViewState(dateFormatter: DateTimeFormatter): WeightViewState.History =
     map { entry ->
         WeightViewStateItem.WeightEntry(
             weight = entry.weight.value.toString(),
             date = entry.date.format(dateFormatter)
         )
-    }.let { WeightViewState.Content(items = it) }
+    }.let { WeightViewState.History(items = it) }
