@@ -11,3 +11,7 @@ INSERT INTO weights (date, weight) VALUES (date('now', '-21 days'), 75.2);
 
 getAllWeightsDesc:
 SELECT * FROM weights ORDER BY date DESC;
+
+insertOrReplaceWeight:
+INSERT OR REPLACE INTO weights(date, weight)
+VALUES (?, ?);

@@ -5,4 +5,6 @@ import kotlinx.coroutines.flow.Flow
 interface WeightRepository {
 
     fun allWeights(): Flow<List<WeightEntry>>
+
+    suspend fun insertWeight(weight: WeightEntry)
 }

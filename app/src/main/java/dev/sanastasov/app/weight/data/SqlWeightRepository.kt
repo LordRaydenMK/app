@@ -22,4 +22,13 @@ class SqlWeightRepository(
             WeightEntry(LocalDate.parse(date), Weight(weight))
         }
     }
+    
+    override suspend fun insertWeight(weight: WeightEntry) {
+        weightQueries.transaction {
+            weightQueries.insertOrReplaceWeight(
+                date = weight.date.toString(),
+                weight = weight.weight.value
+            )
+        }
+    }
 }
