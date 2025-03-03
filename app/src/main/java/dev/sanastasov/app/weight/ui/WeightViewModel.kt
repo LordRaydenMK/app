@@ -5,9 +5,10 @@ import androidx.lifecycle.viewModelScope
 import dev.sanastasov.app.weight.domain.Weight
 import dev.sanastasov.app.weight.domain.WeightEntry
 import dev.sanastasov.app.weight.domain.WeightRepository
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -19,15 +20,28 @@ class WeightViewModel(
 
     private val dateFormatter = DateTimeFormatter.ofPattern("MMM dd, yyyy")
 
-    val state: StateFlow<WeightViewState> = repository.allWeights()
-        .map { weights -> weights.toViewState(dateFormatter) }
+    private val insert = MutableStateFlow(false)
+
+    val state: StateFlow<WeightViewState> = combine(
+        repository.allWeights(),
+        insert,
+    ) { weights, insert ->
+        when (insert) {
+            true -> WeightViewState.InsertWeight("")
+            false -> weights.toViewState(dateFormatter)
+        }
+    }
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(5_000),
             WeightViewState.History(emptyList())
         )
 
-    fun insertWeight(weightStr: String) {
+    fun onInsertWeightClicked() {
+        insert.value = true
+    }
+
+    fun onSubmitClicked(weightStr: String) {
         val weightValue = weightStr.toDouble()
         viewModelScope.launch {
             val weightEntry = WeightEntry(
@@ -35,6 +49,7 @@ class WeightViewModel(
                 weight = Weight(weightValue)
             )
             repository.insertWeight(weightEntry)
+            insert.value = false
         }
     }
 }

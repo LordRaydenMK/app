@@ -24,26 +24,33 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.sanastasov.app.weight.ui.WeightViewState.History
+import dev.sanastasov.app.weight.ui.WeightViewState.InsertWeight
 
 @ExperimentalMaterial3Api
 @Composable
-fun WeightScreen(state: WeightViewState) {
+fun WeightScreen(
+    state: WeightViewState,
+    onInsertWeight: () -> Unit,
+    onSubmitWeight: (String) -> Unit,
+) {
     Scaffold(
         topBar = { TopAppBar(title = { Text("My App") }) },
         floatingActionButton = {
-            FloatingActionButton(onClick = { /* Handle FAB click */ }) {
+            FloatingActionButton(onClick = onInsertWeight) {
                 Icon(Icons.Filled.Add, "Add")
             }
         }
     ) { paddingValues ->
         when (state) {
-            is WeightViewState.History -> WeightContent(state, Modifier.padding(paddingValues))
+            is History -> WeightContent(state, Modifier.padding(paddingValues))
+            is InsertWeight -> InsertWeight(Modifier.padding(paddingValues), onSubmitWeight)
         }
     }
 }
 
 @Composable
-fun WeightContent(state: WeightViewState.History, modifier: Modifier) {
+fun WeightContent(state: History, modifier: Modifier) {
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
@@ -83,7 +90,7 @@ fun WeightEntry(item: WeightViewStateItem.WeightEntry) {
 @Composable
 @Preview
 private fun WeightScreenPreview() {
-    val state = WeightViewState.History(
+    val state = History(
         listOf(
             WeightViewStateItem.WeightEntry("74 kg", "1 Mar"),
             WeightViewStateItem.WeightEntry("75.5 kg", "20 Feb"),
@@ -91,6 +98,6 @@ private fun WeightScreenPreview() {
         )
     )
     Surface(Modifier.fillMaxSize()) {
-        WeightScreen(state = state)
+        WeightScreen(state = state, {}) {}
     }
 }

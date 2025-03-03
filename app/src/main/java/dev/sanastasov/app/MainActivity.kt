@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val state by viewModel.state.collectAsState()
-                    WeightScreen(state)
+                    WeightScreen(state, viewModel::onInsertWeightClicked, viewModel::onSubmitClicked)
                 }
             }
         }
