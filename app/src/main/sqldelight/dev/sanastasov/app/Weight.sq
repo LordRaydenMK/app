@@ -1,0 +1,12 @@
+CREATE TABLE weights (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    date TEXT UNIQUE NOT NULL,  -- Stored as ISO 8601 string (e.g., "2025-02-28")
+    weight REAL NOT NULL
+);
+
+getAllWeightsDesc:
+SELECT * FROM weights ORDER BY date DESC;
+
+insertOrReplaceWeight:
+INSERT OR REPLACE INTO weights(date, weight)
+VALUES (?, ?);

@@ -1,9 +1,8 @@
-import app.cash.paparazzi.gradle.PaparazziPlugin
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
+    id("app.cash.sqldelight")
     id("app.cash.paparazzi")
 }
 
@@ -33,7 +32,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     kotlin {
@@ -49,6 +51,14 @@ android {
     }
 }
 
+sqldelight {
+    databases {
+        create("Database") {
+            packageName.set("dev.sanastasov.app")
+        }
+    }
+}
+
 dependencies {
     implementation("androidx.core:core-ktx:1.15.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
@@ -58,6 +68,10 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+
+    val sqlDelightVersion = "2.0.2"
+    implementation("app.cash.sqldelight:android-driver:$sqlDelightVersion")
+    implementation("app.cash.sqldelight:coroutines-extensions:$sqlDelightVersion")
 
     testImplementation("junit:junit:4.13.2")
 
