@@ -25,7 +25,7 @@ class WeightScreenKtTest {
 
         paparazzi.snapshot {
             AppTheme {
-                WeightScreen(state = state)
+                WeightScreen(state = state, {}, {})
             }
         }
     }
