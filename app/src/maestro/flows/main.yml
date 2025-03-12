@@ -1,0 +1,4 @@
+appId: dev.sanastasov.app
+---
+- launchApp
+- assertVisible: My App
