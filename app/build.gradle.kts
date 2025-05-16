@@ -69,7 +69,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
 
-    val sqlDelightVersion = "2.0.2"
+    val sqlDelightVersion = "2.1.0"
     implementation("app.cash.sqldelight:android-driver:$sqlDelightVersion")
     implementation("app.cash.sqldelight:coroutines-extensions:$sqlDelightVersion")
 
